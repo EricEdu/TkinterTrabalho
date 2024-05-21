@@ -16,7 +16,6 @@ import sqlite3
 
 
 
-
 #Cria conexção
 connection = sqlite3.connect("teste.db")
 
@@ -55,6 +54,22 @@ def Main():
     e1 = tkinter.Entry(root)
     e1.bind('<Key>', lambda x:textoEntrada.set(e1.get()+x.char))
     e1.pack()
+
+    label = tkinter.Label(root, text="CPF")
+    label.pack()
+
+    textoEntrada = tkinter.StringVar()
+    e2 = tkinter.Entry(root)
+    e2.bind('<Key>', lambda x:textoEntrada.set(e2.get()+x.char))
+    e2.pack()
+
+    label = tkinter.Label(root, text="Estado")
+    label.pack()
+
+    textoEntrada = tkinter.StringVar()
+    e3 = tkinter.Entry(root)
+    e3.bind('<Key>', lambda x:textoEntrada.set(e3.get()+x.char))
+    e3.pack()
     
     test2 = tkinter.Button(root, text="Salvar")
     test2['command'] = funcExemplo  #alterar para chamar outra função
