@@ -44,8 +44,9 @@ def funcExemplo():
     
 def Main():
     root = tkinter.Tk()
+    root.configure(background='red')
     root.title("Trabalho RAD")
-    root.resizable(False, False)
+    root.resizable(True, True)
     
     label = tkinter.Label(root, text="Nome")
     label.pack()
