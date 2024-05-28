@@ -15,12 +15,16 @@ import sqlite3
 #Adicionar verificação de CPF e de estado, com base na função cpf e na lista de estados .txt antes de adicionar no sqlite v7
 
 
-# Cria conexÇão
+import sqlite3
+import tkinter
+from tkinter import StringVar, OptionMenu
+
+# Cria conexão
 connection = sqlite3.connect("teste.db")
 
 # Cria o cursor e cria a tabela
 cursor = connection.cursor()
-cursor.execute("CREATE TABLE IF NOT EXISTS Tabela1 (nome TEXT, cpf TEXT, estado TEXT)")
+cursor.execute("CREATE TABLE IF NOT EXISTS Tabela1 (nome TEXT, cpf TEXT, estado TEXT, tipo TEXT)")
 
 def VerificarCPF(CPF):
     # CPF deve ser na forma "123.456.789-10"
@@ -29,9 +33,9 @@ def VerificarCPF(CPF):
             return False
     return True
 
-def inserevalores(nome, cpf, estado):
+def inserevalores(nome, cpf, estado, tipo):
     # Insere linha na tabela
-    cursor.execute("INSERT INTO Tabela1 (nome, cpf, estado) VALUES (?, ?, ?)", (nome, cpf, estado))
+    cursor.execute("INSERT INTO Tabela1 (nome, cpf, estado, tipo) VALUES (?, ?, ?, ?)", (nome, cpf, estado, tipo))
     connection.commit()  # Salva as alterações no banco de dados
 
 def pegavalores():
@@ -43,8 +47,9 @@ def salvar_dados():
     nome = e1.get()
     cpf = e2.get()
     estado = e3.get()
+    tipo = tipo_var.get()
     if VerificarCPF(cpf):
-        inserevalores(nome, cpf, estado)
+        inserevalores(nome, cpf, estado, tipo)
         print("Dados salvos com sucesso")
     else:
         print("CPF inválido")
@@ -75,6 +80,17 @@ def Main():
     global e3  # Definindo e3 como global para ser acessível na função salvar_dados
     e3 = tkinter.Entry(root)
     e3.pack()
+
+    label = tkinter.Label(root, text="Tipo")
+    label.pack()
+
+    global tipo_var  # Definindo tipo_var como global para ser acessível na função salvar_dados
+    tipo_var = StringVar(root)
+    tipo_var.set("CLT")  # Define uma opção padrão
+
+    tipo_options = ["CLT", "MEI", "Sócio"]
+    tipo_menu = OptionMenu(root, tipo_var, *tipo_options)
+    tipo_menu.pack()
     
     test2 = tkinter.Button(root, text="Salvar")
     test2['command'] = salvar_dados  # Associando a função salvar_dados ao botão
