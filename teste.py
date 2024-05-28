@@ -15,33 +15,40 @@ import sqlite3
 #Adicionar verificação de CPF e de estado, com base na função cpf e na lista de estados .txt antes de adicionar no sqlite v7
 
 
-
-#Cria conexção
+# Cria conexÇão
 connection = sqlite3.connect("teste.db")
 
-#Cria o cursos e cria a tabela
+# Cria o cursor e cria a tabela
 cursor = connection.cursor()
-cursor.execute("CREATE TABLE IF NOT EXISTS Tabela1 (nome TEXT, curso TEXT, matricula INTEGER)")
-def VerificarCPF(CPF):
-    #CPF deve ser na forma "123.456.789-10"
-    for trecho in CPF.split("."):
-        if len(trecho)!=3:
-            return False
-        else:
-            return True
+cursor.execute("CREATE TABLE IF NOT EXISTS Tabela1 (nome TEXT, cpf TEXT, estado TEXT)")
 
-def inserevalores(Valor1, Valor2):
-    #Insere linha na tabela
-    cursor.execute("INSERT INTO Tabela1 VALUES ('"+Valor1+"', '"+Valor2+"')")
+def VerificarCPF(CPF):
+    # CPF deve ser na forma "123.456.789-10"
+    for trecho in CPF.split("."):
+        if len(trecho) != 3:
+            return False
+    return True
+
+def inserevalores(nome, cpf, estado):
+    # Insere linha na tabela
+    cursor.execute("INSERT INTO Tabela1 (nome, cpf, estado) VALUES (?, ?, ?)", (nome, cpf, estado))
+    connection.commit()  # Salva as alterações no banco de dados
 
 def pegavalores():
-    #Pega valores da tabela
+    # Pega valores da tabela
     rows = cursor.execute("SELECT * FROM Tabela1").fetchall()
     print(rows)
 
-def funcExemplo():
-    print("Exemplo de funcao")
-    
+def salvar_dados():
+    nome = e1.get()
+    cpf = e2.get()
+    estado = e3.get()
+    if VerificarCPF(cpf):
+        inserevalores(nome, cpf, estado)
+        print("Dados salvos com sucesso")
+    else:
+        print("CPF inválido")
+
 def Main():
     root = tkinter.Tk()
     root.configure(background='red')
@@ -51,34 +58,31 @@ def Main():
     label = tkinter.Label(root, text="Nome")
     label.pack()
 
-    textoEntrada = tkinter.StringVar()
+    global e1  # Definindo e1 como global para ser acessível na função salvar_dados
     e1 = tkinter.Entry(root)
-    e1.bind('<Key>', lambda x:textoEntrada.set(e1.get()+x.char))
     e1.pack()
 
     label = tkinter.Label(root, text="CPF")
     label.pack()
 
-    textoEntrada = tkinter.StringVar()
+    global e2  # Definindo e2 como global para ser acessível na função salvar_dados
     e2 = tkinter.Entry(root)
-    e2.bind('<Key>', lambda x:textoEntrada.set(e2.get()+x.char))
     e2.pack()
 
     label = tkinter.Label(root, text="Estado")
     label.pack()
 
-    textoEntrada = tkinter.StringVar()
+    global e3  # Definindo e3 como global para ser acessível na função salvar_dados
     e3 = tkinter.Entry(root)
-    e3.bind('<Key>', lambda x:textoEntrada.set(e3.get()+x.char))
     e3.pack()
     
     test2 = tkinter.Button(root, text="Salvar")
-    test2['command'] = funcExemplo  #alterar para chamar outra função
+    test2['command'] = salvar_dados  # Associando a função salvar_dados ao botão
     test2.pack()
 
-    root.iconify() #Minimiza a tela
+    root.iconify() # Minimiza a tela
     root.update()
-    root.deiconify() #Maximiza a tela
-    root.mainloop()  #loop principal, impede o código de seguir e permite capturar inputs
+    root.deiconify() # Maximiza a tela
+    root.mainloop()  # Loop principal, impede o código de seguir e permite capturar inputs
 
 Main()
