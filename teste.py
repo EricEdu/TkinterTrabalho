@@ -1,5 +1,5 @@
 import tkinter
-from tkinter import messagebox as mb
+from tkinter import OptionMenu, StringVar, messagebox as mb
 from tkinter import ttk
 import sqlite3
 
@@ -14,8 +14,7 @@ import sqlite3
 #Merge de x com v - v6
 #Adicionar verificação de CPF e de estado, com base na função cpf e na lista de estados .txt antes de adicionar no sqlite v7
 
-
-# Cria conexÇão
+# Cria conexão
 connection = sqlite3.connect("teste.db")
 
 # Cria o cursor e cria a tabela
@@ -42,12 +41,18 @@ def pegavalores():
 def salvar_dados():
     nome = e1.get()
     cpf = e2.get()
-    estado = e3.get()
+    estado = estado_var.get()
     if VerificarCPF(cpf):
         inserevalores(nome, cpf, estado)
         print("Dados salvos com sucesso")
     else:
         print("CPF inválido")
+
+def carregar_estados():
+    # Lê os estados do arquivo config.txt
+    with open('config.txt', 'r') as file:
+        estados = [linha.strip() for linha in file.readlines()]
+    return estados
 
 def Main():
     root = tkinter.Tk()
@@ -72,9 +77,13 @@ def Main():
     label = tkinter.Label(root, text="Estado")
     label.pack()
 
-    global e3  # Definindo e3 como global para ser acessível na função salvar_dados
-    e3 = tkinter.Entry(root)
-    e3.pack()
+    estados = carregar_estados()
+    global estado_var  # Definindo estado_var como global para ser acessível na função salvar_dados
+    estado_var = StringVar(root)
+    estado_var.set(estados[0])  # Define um estado padrão
+
+    option_menu = OptionMenu(root, estado_var, *estados)
+    option_menu.pack()
     
     test2 = tkinter.Button(root, text="Salvar")
     test2['command'] = salvar_dados  # Associando a função salvar_dados ao botão
