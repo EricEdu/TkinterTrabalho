@@ -1,5 +1,1 @@
-Estado1
-Estado2
-Estado3
-Estado4
-Estado5
+Estado1;Estado2;Estado3;Estado4;Estado5;Estado6;Estado7;Estado8;Estado9;Estado10

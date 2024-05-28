@@ -51,7 +51,8 @@ def salvar_dados():
 def carregar_estados():
     # Lê os estados do arquivo config.txt
     with open('config.txt', 'r') as file:
-        estados = [linha.strip() for linha in file.readlines()]
+        conteudo = file.read()
+        estados = [estado.strip() for estado in conteudo.split(';')]
     return estados
 
 def Main():
