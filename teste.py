@@ -15,7 +15,7 @@ import sqlite3
 #Adicionar verificação de CPF e de estado, com base na função cpf e na lista de estados .txt antes de adicionar no sqlite v7
 
 
-# Cria conexÇão
+## Cria conexão
 connection = sqlite3.connect("teste.db")
 
 # Cria o cursor e cria a tabela
@@ -24,9 +24,17 @@ cursor.execute("CREATE TABLE IF NOT EXISTS Tabela1 (nome TEXT, cpf TEXT, estado 
 
 def VerificarCPF(CPF):
     # CPF deve ser na forma "123.456.789-10"
-    for trecho in CPF.split("."):
-        if len(trecho) != 3:
+    if len(CPF) != 14:
+        return False
+    partes = CPF.split(".")
+    if len(partes) != 3:
+        return False
+    for parte in partes[:2]:
+        if len(parte) != 3 or not parte.isdigit():
             return False
+    parte3 = partes[2].split("-")
+    if len(parte3) != 2 or len(parte3[0]) != 3 or not parte3[0].isdigit() or len(parte3[1]) != 2 or not parte3[1].isdigit():
+        return False
     return True
 
 def inserevalores(nome, cpf, estado):
