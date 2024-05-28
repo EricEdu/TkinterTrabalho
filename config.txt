@@ -1,1 +1,1 @@
-Estado1;Estado2;Estado3;Estado4;Estado5;Estado6;Estado7;Estado8;Estado9;Estado10
+SP;RJ;MG;RS;BA;PR;SC;GO;ES;DF

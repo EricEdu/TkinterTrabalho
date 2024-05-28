@@ -15,7 +15,7 @@ import sqlite3
 #Adicionar verificação de CPF e de estado, com base na função cpf e na lista de estados .txt antes de adicionar no sqlite v7
 
 
-## Cria conexão
+# Cria conexão
 connection = sqlite3.connect("teste.db")
 
 # Cria o cursor e cria a tabela
@@ -47,22 +47,25 @@ def pegavalores():
     rows = cursor.execute("SELECT * FROM Tabela1").fetchall()
     print(rows)
 
-def salvar_dados():
-    nome = e1.get()
-    cpf = e2.get()
-    estado = estado_var.get()
-    if VerificarCPF(cpf):
-        inserevalores(nome, cpf, estado)
-        print("Dados salvos com sucesso")
-    else:
-        print("CPF inválido")
-
 def carregar_estados():
     # Lê os estados do arquivo config.txt
     with open('config.txt', 'r') as file:
         conteudo = file.read()
         estados = [estado.strip() for estado in conteudo.split(';')]
     return estados
+
+def salvar_dados():
+    nome = e1.get()
+    cpf = e2.get()
+    estado = estado_var.get()
+    if VerificarCPF(cpf) and estado in estados:
+        inserevalores(nome, cpf, estado)
+        print("Dados salvos com sucesso")
+    else:
+        if not VerificarCPF(cpf):
+            print("CPF inválido")
+        if estado not in estados:
+            print("Estado inválido")
 
 def Main():
     root = tkinter.Tk()
@@ -87,6 +90,7 @@ def Main():
     label = tkinter.Label(root, text="Estado")
     label.pack()
 
+    global estados  # Definindo estados como global para ser acessível na função salvar_dados
     estados = carregar_estados()
     global estado_var  # Definindo estado_var como global para ser acessível na função salvar_dados
     estado_var = StringVar(root)
